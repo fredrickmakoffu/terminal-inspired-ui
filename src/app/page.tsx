@@ -2,10 +2,19 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { themes, seasonalParticles } from "../lib/themes";
+import { usePs2Sounds } from "../lib/ps2-sounds";
+import AnimatedNumber from "../components/AnimatedNumber";
 import type { Command, CommandHistory, Particle } from "../lib/types";
 
 export default function LicenseManagement() {
-  const [currentTheme, setCurrentTheme] = useState("gold");
+  const [currentTheme, setCurrentTheme] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem("uiTheme");
+      return (saved as string) || "gold";
+    } catch {
+      return "gold";
+    }
+  });
   const [autoMode, setAutoMode] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showCommandPalette, setShowCommandPalette] = useState(false);
@@ -23,6 +32,9 @@ export default function LicenseManagement() {
   const animationRef = useRef<number | null>(null);
 
   const theme = themes[currentTheme];
+
+  // initialize ps2 sounds (global button click sounds) and expose setter to pick sound theme
+  const { soundTheme, setSoundTheme, play } = usePs2Sounds();
 
   // Time-based theme detection
   const getTimeBasedTheme = useCallback(() => {
@@ -145,6 +157,11 @@ export default function LicenseManagement() {
     (themeName: string) => {
       const newTheme = themes[themeName];
       setCurrentTheme(themeName);
+      try {
+        localStorage.setItem("uiTheme", themeName);
+      } catch {
+        // ignore storage errors
+      }
       setAutoMode(false); // Disable auto mode when manually switching
       showStatus(
         `Switched to ${newTheme.name} theme - ${newTheme.season} vibes`,
@@ -599,6 +616,35 @@ export default function LicenseManagement() {
                 </div>
               </div>
 
+              {/* Sound Theme Selector */}
+              <div className="mb-3">
+                <div className="text-xs font-bold mb-2">SOUND THEME</div>
+                <div className="flex gap-2">
+                  {["neutral", "spring", "winter", "dark"].map((st) => (
+                    <button
+                      key={st}
+                      onClick={() => {
+                        setSoundTheme(st);
+                        // play a short sample to indicate selection
+                        try {
+                          play("confirm");
+                        } catch {
+                          /* ignore */
+                        }
+                      }}
+                      className={`px-2 py-1 text-xs border ${
+                        soundTheme === st ? "bg-gray-200" : "bg-transparent"
+                      }`}
+                    >
+                      {st.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+                <div className="text-xs text-gray-600 mt-2">
+                  CURRENT: {soundTheme?.toUpperCase()}
+                </div>
+              </div>
+
               <div className="space-y-2">
                 {Object.entries(themes).map(([key, themeOption], index) => (
                   <div
@@ -609,6 +655,7 @@ export default function LicenseManagement() {
                         : `hover:${themeOption.colors.secondary} border-gray-300`
                     }`}
                     onClick={() => switchTheme(key)}
+                    data-sound="confirm-final"
                   >
                     <div className="flex items-center gap-3">
                       <div
@@ -793,18 +840,21 @@ export default function LicenseManagement() {
               </div>
               <button
                 onClick={() => setShowThemeSelector(true)}
+                data-sound="nav"
                 className={`border ${theme.colors.border} px-2 py-1 hover:${theme.colors.secondary} text-xs transition-colors duration-150`}
               >
                 ⌘+T CHANGE
               </button>
               <button
                 onClick={toggleAutoMode}
+                data-sound="confirm"
                 className={`border ${theme.colors.border} px-2 py-1 hover:${theme.colors.secondary} text-xs transition-colors duration-150`}
               >
                 ⌘+D AUTO
               </button>
               <button
                 onClick={() => triggerSeasonalAnimation(theme.season)}
+                data-sound="confirm"
                 className={`border ${theme.colors.border} px-2 py-1 hover:${theme.colors.secondary} text-xs transition-colors duration-150`}
               >
                 ⌘+A ANIMATE
@@ -861,19 +911,34 @@ export default function LicenseManagement() {
             <div className="grid grid-cols-4 gap-6 text-xs">
               <div>
                 <div className={theme.colors.textMuted}>TOTAL LICENSES</div>
-                <div className="font-bold text-lg">200</div>
+                <div className="font-bold text-lg">
+                  <AnimatedNumber value={200} duration={900} />
+                </div>
               </div>
               <div>
                 <div className={theme.colors.textMuted}>ALLOCATED</div>
-                <div className="font-bold text-lg">44</div>
+                <div className="font-bold text-lg">
+                  <AnimatedNumber value={44} duration={900} />
+                </div>
               </div>
               <div>
                 <div className={theme.colors.textMuted}>UNALLOCATED</div>
-                <div className="font-bold text-lg">156</div>
+                <div className="font-bold text-lg">
+                  <AnimatedNumber value={156} duration={900} />
+                </div>
               </div>
               <div>
                 <div className={theme.colors.textMuted}>RATE/USER</div>
-                <div className="font-bold text-lg">1,548 KES</div>
+                <div className="font-bold text-lg">
+                  <AnimatedNumber
+                    value={1548.38}
+                    duration={900}
+                    decimals={2}
+                    format={(v) =>
+                      `${new Intl.NumberFormat().format(Number(v))} KES`
+                    }
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1013,6 +1078,7 @@ export default function LicenseManagement() {
                     <td className="p-2 text-center">
                       <button
                         className={`border ${theme.colors.border} px-2 py-1 hover:${theme.colors.secondary} transition-colors duration-150 ${theme.colors.text}`}
+                        data-sound="nav"
                       >
                         VIEW DETAILS
                       </button>
@@ -1048,6 +1114,7 @@ export default function LicenseManagement() {
                         : `hover:${theme.colors.secondary}`
                     }`}
                     onClick={() => commands[0].action()}
+                    data-sound="nav"
                   >
                     ⌘+1 UPGRADE
                   </button>
@@ -1058,6 +1125,7 @@ export default function LicenseManagement() {
                         : `hover:${theme.colors.secondary}`
                     }`}
                     onClick={() => commands[1].action()}
+                    data-sound="nav"
                   >
                     ⌘+2 DOWNGRADE
                   </button>
@@ -1068,6 +1136,7 @@ export default function LicenseManagement() {
                         : `hover:${theme.colors.secondary}`
                     }`}
                     onClick={() => commands[2].action()}
+                    data-sound="nav"
                   >
                     ⌘+3 DETAILS
                   </button>
@@ -1078,6 +1147,7 @@ export default function LicenseManagement() {
                         : `hover:${theme.colors.secondary}`
                     }`}
                     onClick={() => commands[3].action()}
+                    data-sound="nav"
                   >
                     ⌘+4 HISTORY
                   </button>
@@ -1094,7 +1164,7 @@ export default function LicenseManagement() {
                     >
                       <div className={theme.colors.textMuted}>ALL LICENSES</div>
                       <div className={`font-bold text-xl ${theme.colors.text}`}>
-                        200
+                        <AnimatedNumber value={200} duration={900} />
                       </div>
                     </div>
                     <div
@@ -1102,7 +1172,7 @@ export default function LicenseManagement() {
                     >
                       <div className={theme.colors.textMuted}>ALLOCATED</div>
                       <div className={`font-bold text-xl ${theme.colors.text}`}>
-                        44
+                        <AnimatedNumber value={44} duration={900} />
                       </div>
                     </div>
                     <div
@@ -1110,7 +1180,7 @@ export default function LicenseManagement() {
                     >
                       <div className={theme.colors.textMuted}>UNALLOCATED</div>
                       <div className={`font-bold text-xl ${theme.colors.text}`}>
-                        156
+                        <AnimatedNumber value={156} duration={900} />
                       </div>
                     </div>
                   </div>
@@ -1151,12 +1221,14 @@ export default function LicenseManagement() {
                       <button
                         className={`flex-1 border ${theme.colors.border} px-3 py-2 text-xs hover:${theme.colors.secondary} transition-colors duration-150 ${theme.colors.text}`}
                         onClick={() => commands[4].action()}
+                        data-sound="nav"
                       >
                         ⌘+S CALCULATE
                       </button>
                       <button
                         className={`flex-1 ${theme.colors.accent} text-white px-3 py-2 text-xs hover:opacity-80 transition-opacity duration-150`}
                         onClick={() => executeCommand("upgrade")}
+                        data-sound="confirm"
                       >
                         UPGRADE
                       </button>
