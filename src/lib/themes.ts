@@ -1,0 +1,163 @@
+import type { Theme } from "./types";
+
+export const themes: Record<string, Theme> = {
+  gold: {
+    name: "Gold",
+    season: "autumn",
+    colors: {
+      primary: "bg-yellow-100",
+      primaryDark: "bg-yellow-200",
+      secondary: "bg-amber-50",
+      accent: "bg-yellow-600",
+      background: "bg-amber-25",
+      surface: "bg-white",
+      border: "border-amber-300",
+      text: "text-amber-900",
+      textMuted: "text-amber-700",
+      success: "bg-yellow-100 text-yellow-800",
+      terminal: {
+        bg: "bg-amber-900",
+        text: "text-yellow-300",
+        prompt: "text-yellow-400",
+      },
+    },
+  },
+  rose: {
+    name: "Rose",
+    season: "spring",
+    colors: {
+      primary: "bg-rose-100",
+      primaryDark: "bg-rose-200",
+      secondary: "bg-pink-50",
+      accent: "bg-rose-600",
+      background: "bg-rose-25",
+      surface: "bg-white",
+      border: "border-rose-300",
+      text: "text-rose-900",
+      textMuted: "text-rose-700",
+      success: "bg-rose-100 text-rose-800",
+      terminal: {
+        bg: "bg-rose-900",
+        text: "text-rose-300",
+        prompt: "text-rose-400",
+      },
+    },
+  },
+  sky: {
+    name: "Sky",
+    season: "winter",
+    colors: {
+      primary: "bg-sky-100",
+      primaryDark: "bg-sky-200",
+      secondary: "bg-blue-50",
+      accent: "bg-sky-600",
+      background: "bg-sky-25",
+      surface: "bg-white",
+      border: "border-sky-300",
+      text: "text-sky-900",
+      textMuted: "text-sky-700",
+      success: "bg-sky-100 text-sky-800",
+      terminal: {
+        bg: "bg-sky-900",
+        text: "text-sky-300",
+        prompt: "text-sky-400",
+      },
+    },
+  },
+  forest: {
+    name: "Forest",
+    season: "summer",
+    colors: {
+      primary: "bg-green-100",
+      primaryDark: "bg-green-200",
+      secondary: "bg-emerald-50",
+      accent: "bg-green-600",
+      background: "bg-green-25",
+      surface: "bg-white",
+      border: "border-green-300",
+      text: "text-green-900",
+      textMuted: "text-green-700",
+      success: "bg-green-100 text-green-800",
+      terminal: {
+        bg: "bg-green-900",
+        text: "text-green-300",
+        prompt: "text-green-400",
+      },
+    },
+  },
+  slate: {
+    name: "Slate",
+    season: "neutral",
+    colors: {
+      primary: "bg-slate-100",
+      primaryDark: "bg-slate-200",
+      secondary: "bg-gray-50",
+      accent: "bg-slate-600",
+      background: "bg-slate-25",
+      surface: "bg-white",
+      border: "border-slate-300",
+      text: "text-slate-900",
+      textMuted: "text-slate-700",
+      success: "bg-slate-100 text-slate-800",
+      terminal: {
+        bg: "bg-slate-900",
+        text: "text-slate-300",
+        prompt: "text-slate-400",
+      },
+    },
+  },
+  dark: {
+    name: "Dark",
+    season: "night",
+    colors: {
+      primary: "bg-gray-800",
+      primaryDark: "bg-gray-700",
+      secondary: "bg-gray-900",
+      accent: "bg-gray-600",
+      background: "bg-black",
+      surface: "bg-gray-900",
+      border: "border-gray-700",
+      text: "text-gray-100",
+      textMuted: "text-gray-400",
+      success: "bg-gray-800 text-green-400",
+      terminal: {
+        bg: "bg-black",
+        text: "text-green-400",
+        prompt: "text-green-300",
+      },
+    },
+  },
+};
+
+export const seasonalParticles = {
+  spring: {
+    characters: ["🌸", "🌺", "🌼", "✿", "❀", "✾"],
+    colors: ["#fda4af", "#f9a8d4", "#fbcfe8", "#fce7f3"],
+    count: 15,
+  },
+  summer: {
+    characters: ["🍃", "🌿", "🌱", "🌾", "🍀", "🌳"],
+    colors: ["#86efac", "#6ee7b7", "#a7f3d0", "#bbf7d0"],
+    count: 12,
+  },
+  autumn: {
+    characters: ["🍂", "🍁", "🌰", "🍄", "🌾", "🎋"],
+    colors: ["#fbbf24", "#f59e0b", "#d97706", "#b45309"],
+    count: 18,
+  },
+  winter: {
+    characters: ["❄", "❅", "❆", "✦", "✧", "⋄"],
+    colors: ["#bae6fd", "#7dd3fc", "#38bdf8", "#0ea5e9"],
+    count: 20,
+  },
+  neutral: {
+    characters: ["◆", "◇", "◈", "◉", "◎", "●"],
+    colors: ["#94a3b8", "#64748b", "#475569", "#334155"],
+    count: 10,
+  },
+  night: {
+    characters: ["✦", "✧", "⋆", "★", "☆", "✩"],
+    colors: ["#6b7280", "#9ca3af", "#d1d5db", "#f3f4f6"],
+    count: 25,
+  },
+} as const;
