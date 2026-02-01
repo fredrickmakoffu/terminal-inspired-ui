@@ -912,19 +912,19 @@ export default function LicenseManagement() {
               <div>
                 <div className={theme.colors.textMuted}>TOTAL LICENSES</div>
                 <div className="font-bold text-lg">
-                  <AnimatedNumber value={200} duration={900} />
+                  <AnimatedNumber value={200} duration={900} startDelay={0} />
                 </div>
               </div>
               <div>
                 <div className={theme.colors.textMuted}>ALLOCATED</div>
                 <div className="font-bold text-lg">
-                  <AnimatedNumber value={44} duration={900} />
+                  <AnimatedNumber value={44} duration={900} startDelay={120} />
                 </div>
               </div>
               <div>
                 <div className={theme.colors.textMuted}>UNALLOCATED</div>
                 <div className="font-bold text-lg">
-                  <AnimatedNumber value={156} duration={900} />
+                  <AnimatedNumber value={156} duration={900} startDelay={240} />
                 </div>
               </div>
               <div>
@@ -934,6 +934,7 @@ export default function LicenseManagement() {
                     value={1548.38}
                     duration={900}
                     decimals={2}
+                    startDelay={360}
                     format={(v) =>
                       `${new Intl.NumberFormat().format(Number(v))} KES`
                     }
@@ -1164,7 +1165,11 @@ export default function LicenseManagement() {
                     >
                       <div className={theme.colors.textMuted}>ALL LICENSES</div>
                       <div className={`font-bold text-xl ${theme.colors.text}`}>
-                        <AnimatedNumber value={200} duration={900} />
+                        <AnimatedNumber
+                          value={200}
+                          duration={900}
+                          startDelay={480}
+                        />
                       </div>
                     </div>
                     <div
@@ -1172,7 +1177,11 @@ export default function LicenseManagement() {
                     >
                       <div className={theme.colors.textMuted}>ALLOCATED</div>
                       <div className={`font-bold text-xl ${theme.colors.text}`}>
-                        <AnimatedNumber value={44} duration={900} />
+                        <AnimatedNumber
+                          value={44}
+                          duration={900}
+                          startDelay={600}
+                        />
                       </div>
                     </div>
                     <div
@@ -1180,7 +1189,11 @@ export default function LicenseManagement() {
                     >
                       <div className={theme.colors.textMuted}>UNALLOCATED</div>
                       <div className={`font-bold text-xl ${theme.colors.text}`}>
-                        <AnimatedNumber value={156} duration={900} />
+                        <AnimatedNumber
+                          value={156}
+                          duration={900}
+                          startDelay={720}
+                        />
                       </div>
                     </div>
                   </div>
