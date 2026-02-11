@@ -1,9 +1,11 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 // all in fixtures is set to tailwind v3 as interims solutions
 
 const config: Config = {
-  darkMode: ["class"],
+  // Tailwind expects a string or a tuple with two entries depending on the
+  // version/types; use the string form 'class' to satisfy the Config type.
+  darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -106,5 +108,5 @@ const config: Config = {
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;
